@@ -21,8 +21,7 @@ $map->addMarker(array(
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	
-	<title>GoogleMaps PHP Class</title>
+	<title>GoogleMaps PHP Class by James Bailey</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 	<?php GoogleMap::loadAPI(); ?>
 	<script>
@@ -53,7 +52,9 @@ $map->addMarker(array(
 	</div>
 	<!-- #map_canvas -->
 	
-	<br>
+	<br><br>
+	
+	Google Maps PHP Class by <a href="http://blog.james-bailey.com/">James Bailey</a>.
 
 </body>
 </html>

@@ -1,0 +1,1 @@
+See index.php for an example.
