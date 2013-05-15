@@ -79,7 +79,7 @@ abstract class AbstractGoogleMap
 		// no params passed.
 		if (!is_array($params) || empty($params)) { return false; }
 	
-		$valid_params = array('addr', 'lat', 'lng', 'title', 'content', 'color', 'label', 'size', 'image');
+		$valid_params = array('addr', 'lat', 'lng', 'title', 'content', 'color', 'label', 'image', 'animation');
 		
 		// set marker data.
 		$data = array();
@@ -190,7 +190,7 @@ class GoogleMap extends AbstractGoogleMap
 	{
 		$centerCoords = (!empty($this->centerCoords)) ? $this->centerCoords : false;
 		$containerID = (!empty($this->containerID)) ? $this->containerID : false;
-		$mapID = $this->mapID;
+		$mapID = str_replace(array(' ','-'), '_', $this->mapID);
 		$markers = $this->markers;
 		$icons = $this->icons;
 		
@@ -213,19 +213,12 @@ class GoogleMap extends AbstractGoogleMap
 				var $markerID = new google.maps.Marker({
 					".(isset($marker_title) ? "title: '$marker_title'," : '')."
 					".(isset($marker_image) ? "icon: '$marker_image'," : '')."
+					".(isset($marker_color) ? "color: '$marker_color', " : '')."
+					".(isset($marker_animation) ? "animation: google.maps.Animation.".strtoupper($marker_animation).", " : '')."
 					position: new google.maps.LatLng($marker_lat,$marker_lng),
 					map: map
 				});
 			";
-			/*
-			$markerJS .= '
-				var '.$markerID.' = new google.maps.Marker({
-					'.(isset($marker_title) ? 'title: \''.$marker_title.'\',' : '').'
-					position: new google.maps.LatLng('.$marker_lat.','.$marker_lng.'),
-					map: map
-				});
-			';
-			*/
 			
 			// Add info window to marker.
 			if (isset($marker_content)) 

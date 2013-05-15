@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>GoogleMaps PHP Class by James Bailey</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script>
+	$(document).ready(function() {
+		$('a.new-window').click(function(e) {
+			e.preventDefault();
+			window.open($(this).attr('href'));
+		});
+	});
+	</script>
+	<style>
+	body {
+		font:normal normal normal 14px/20px georgia, serif;
+		color:#333;
+		width:640px;
+	}
+	a { color:#369; font-weight:bold; }
+	h2 a { color:#333; text-decoration:none; }
+	ul li h4 { margin-bottom:0; }
+	ul li p { margin-top:0; }
+	code { 
+		display:block; 
+		padding:10px 15px; 
+		background:#eee; 
+		color:#333;
+		border-bottom:4px solid #ddd;
+		font:bold 13px/18px consolas, courier new, serif;
+	}
+	code span.comment { color:#777; }
+	</style>
+</head>
+<body>
+	<h1>GoogleMaps PHP Class</h1>
+	<p>GoogleMaps PHP Class by <a href="http://blog.james-bailey.com" class="new-window">James Bailey</a></p>
+	<p>Thanks for Downloading my GoogleMaps PHP Class kit.</p>
+	<p>
+		My code will enable you to generate complex Google Maps with just a few lines of code,
+		my classes take care of the javascript behind the scenes.
+	</p>
+	<p>
+		Included in GoogleMaps.php are Two usable classes.
+		<a href="#googlemap">GoogleMap</a> and <a href="#googlemap_static">GoogleMap_Static</a>.
+	</p>
+	<hr>
+		
+	<h2><a name="googlemap">GoogleMap (Dynamic)</a></h2>
+	<p>
+		The <strong>GoogleMap</strong> class eases the process of creating dynamic, javascript-powered maps.
+		Functionality included in this class enables you to:
+		<br>
+		<ul>
+			<li>Add clickable and customizable markers to the map (with, optionally, a small popup window with HTML content).</li>
+			<li>Find latitude &amp; longitude coordinates from an address.</li>
+			<li>Have multiple dynamic maps on one page if required, each with its own set of markers.</li>
+		</ul>
+		<strong>In addition</strong>, it is really simple to integrate this functionality into your
+		website, content management system or other web-based project.
+	</p>
+	
+	<h3>Initialization</h3>
+	<p>
+		When initializing a new map object, you need to specify at the very least a map ID, the coordinates the map should centre on and the html container ID.
+	</p>
+	<code>
+		&lt;?php
+		<br>include 'googlemaps.php';
+		<br>$map = new GoogleMap(array(
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;'mapID' => 'my_map',
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;'containerID' => 'map_container',
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;'centerCoords' => array('lat' => '55.378051', 'lng' => '-3.435973'),
+		<br>));
+		<br>?&gt;
+	</code>
+	
+	<p>
+		<strong>Other GoogleMap options</strong>
+		<ul>
+			<li>
+				<strong>scaleControl</strong>
+				<br>
+				If true (default), the scale control is displayed on the map.
+			</li>
+			<li>
+				<strong>streetViewControl</strong>
+				<br>
+				If true, the street view control is displayed on the map (default value is false).
+			</li>
+			<li>
+				<strong>mapTypeControl</strong>
+				<br>
+				If true (default), the map type control is displayed on the map.
+			</li>
+			<li>
+				<strong>mapTypeId</strong>
+				<br>
+				The type of map to be displayed, the possible values are: 
+				<em>roadmap</em> (default), <em>satellite</em>, <em>hybrid</em> or <em>terrain</em>.
+			</li>
+			<li>
+				<strong>zoomControl</strong>
+				<br>
+				If true (default), the zoom control is displayed on the map.
+			</li>
+			<li>
+				<strong>zoomLevel</strong>
+				<br>
+				How far to zoom in on the map. The higher the number the more 'zoomed in' you are.
+			</li>
+			
+		</ul>
+	</p>
+	
+	<h3>Usage</h3>
+	<p><a href="example_dynamic.php">See example</a></p>
+	
+	<p>
+		Once your map object is initialized, we need to load jQuery and load the API in the web page
+		we are installing the map on.
+	</p>
+	<code>
+		&lt;?php<br>
+		include 'googlemaps.php';<br>
+		$map = new GoogleMap(array(<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;'mapID' =&gt; 'my_map',<br>
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;'containerID' => 'map_container',<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;'centerCoords' =&gt; array('lat' =&gt; '55.378051', 'lng' =&gt; '-3.435973'),<br>
+		));<br>
+		?&gt; <br>
+		&lt;!doctype html&gt;<br>
+		&lt;html lang=&quot;en&quot;&gt;<br>
+		&lt;head&gt;<br>
+		&lt;meta charset=&quot;utf-8&quot;&gt;<br>
+		&lt;title&gt;&lt;/title&gt;<br>
+		<span class="comment">&lt;!-- Load jQuery --&gt;</span><br>
+		&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js&quot; &gt;&lt;/script&gt;<br>
+		<span class="comment">&lt;!-- Style the map container, most importantly setting its size --&gt;</span><br>
+		&lt;style&gt;<br>
+		div#map_container {<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;width:500px;<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;height:300px;<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;display:block;<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;border:2px solid #333;<br>
+		}<br>
+		&lt;/style&gt;<br>
+		<span class="comment">&lt;!-- <br>
+		&nbsp;&nbsp;&nbsp;&nbsp;Load the Google Maps API. If your working locally, just remove YOUR_API_KEY.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;If your code is going online you need to get an API key.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;See here: https://developers.google.com/maps/documentation/javascript/tutorial#api_key<br>
+		--&gt;</span><br>
+		&lt;?php GoogleMap::loadAPI(YOUR_API_KEY); ?&gt;<br>
+		<span class="comment">&lt;!--<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;Generate the map. The createMap function will generate the javascript<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;required to create the map and any markers it has. <br>
+		--&gt;</span><br>
+		&lt;?php $map-&gt;createMap(true); ?&gt;<br>
+		&lt;/head&gt;<br>
+		&lt;body&gt;<br>
+		<br>
+		<span class="comment">&lt;!-- A div container where the map will be stored --&gt;</span><br>
+		&lt;div id=&quot;map_container&quot;&gt;&lt;/div&gt;<br>
+		<br>
+		&lt;/body&gt;<br>
+		&lt;/html&gt; 
+	</code>
+	
+	<h3>Methods Available</h3>
+	<ul>
+		<li>
+			<h4>addMarker(params = array())</h4>
+			<p>
+				Add a marker to the map. The list of params you can use are as follows.
+				<ul>
+					<li><strong>addr</strong> - A property address to place the marker at.</li>
+					<li><strong>lat, lng</strong> - Latitude/longitude coordinates (alternative to addr).</li>
+					<li><strong>title</strong> - Text that appears when hovering over the marker.</li>
+					<li><strong>content</strong> - HTML content for the popup window, if empty no popup window is generated.</li>
+					<li><strong>image</strong> - URL or path to a custom icon file for the marker (dynamic maps only).</li>
+					<li><strong>animation</strong> - Add an animation effect to the marker (<em>bounce</em> or <em>drop</em>).
+				</ul>
+			</p>
+		</li>
+		<li>
+			<h4>loadAPI(api_key, sensor=false)</h4>
+			<p>
+				To use the GoogleMaps API online, you need to <a href="https://developers.google.com/maps/documentation/javascript/tutorial#api_key" class="new-window">register and obtain an API key</a>.
+				Once obtained you must use the loadAPI method, with your key, to load the API.
+			</p>
+		</li>
+		<li>
+			<h4>findCoordsByAddr(address)</h4>
+			<p>
+				This method asks google to return the latitude and longitude for a given address. 
+				It is only as accurate as the address provided and can sometimes be wrong or inaccurate.
+			</p>
+		</li>
+		<li>
+			<h4>createMap(autoload=false)</h4>
+			<p>
+				This method will generate the javascript required to load the map and its markers.
+				If autoload is true, the map will be loaded when the page loads. If false, the function 
+				will return the javascript function name required to initialize the map later on.
+			</p>
+		</li>
+	</ul>
+	<hr>
+	
+	<h2><a name="googlemap_static">GoogleMap_Static</a></h2>
+	<p>
+		The <strong>GoogleMap_Static</strong> class generates images rather than javascript-baed maps.
+		This is useful for displaying a map to users with javascript disabled or users of really old browsers.
+	</p>
+	<p>
+		In the <a href="example_static.php" class="new-window">example</a>, I have used both a static map and a dynamic map,
+		by hiding the static map with javascript I ensure that both javascript and non-javascript users see a map.
+	</p>
+	
+	<h3>Methods Available</h3>
+	<ul>
+		<li>
+			<h4>addMarker(params = array())</h4>
+			<p>
+				Add a marker to the map. The list of params you can use are as follows.
+				<ul>
+					<li><strong>addr</strong> - A property address to place the marker at.</li>
+					<li><strong>lat, lng</strong> - Latitude/longitude coordinates (alternative to addr).</li>
+					<li><strong>color</strong> - Color of the icon (static maps only).</li>
+					<li><strong>label</strong> - A single character to place on the marker and serve as a label (static maps only).</li>
+				</ul>
+			</p>
+		</li>
+		<li>
+			<h4>findCoordsByAddr(address)</h4>
+			<p>See above.</p>
+		</li>
+		<li>
+			<h4>createMap(returnURL=false)</h4>
+			<p>
+				Compiles the Google Maps API URL required to generate a map image. If returnURL is false, the image is automatically 
+				outputed within an HTML img element. If returnURL is true, the URL to the map is returned instead.
+			</p>
+		</li>
+	</ul>
+	
+	<h3>Usage</h3>
+	<p><a href="example_static.php">See example</a></p>
+	
+	<code>
+		&lt;?php
+		<br>include 'googlemaps.php';
+		<br>
+		<br><span class="comment">/* Initialize static map object. */</span>
+		<br>$static_map = new GoogleMap_Static(array(
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;'size' =&gt; '500x300',
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;'zoomLevel' =&gt; 15,
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;'centerCoords' =&gt; array('lat' =&gt; '37.422858', 'lng' =&gt; '-122.085065'),
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;'imgAttrs' =&gt; array('class' =&gt; 'static_map')
+		<br>));
+		<br>
+		<br><span class="comment">/* Add a marker in the centre of the map. */</span>
+		<br>$static_map-&gt;addMarker(array(
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;'addr' =&gt; 'center',
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;'color' =&gt; 'red',
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;'label' =&gt; 'G'
+		<br>));
+		<br>
+		<br>?&gt;
+		<br>&lt;!doctype html&gt;
+		<br>&lt;html lang=&quot;en&quot;&gt;
+		<br>&lt;head&gt;
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;meta charset=&quot;utf-8&quot;&gt;
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;GoogleMaps PHP Class by James Bailey&lt;/title&gt;
+		<br>&lt;/head&gt;
+		<br>&lt;body&gt;
+		<br>
+		<br>&lt;?php 
+		<br><span class="comment">/**
+		<br> * Create the map image element.
+		<br> */</span>
+		<br>$static_map-&gt;createMap(); 
+		<br>
+		<br><span class="comment">/**
+		<br> * You could also get the image URL and display the image yourself.
+		<br> *
+		<br> * $image_url = $static_map-&gt;createMap(true);
+		<br> * &lt;img src=&quot;$image_url&quot; alt=&quot;&quot;&gt;
+		<br> */</span>
+		<br>?&gt;
+		<br>
+		<br>&lt;/body&gt;
+		<br>&lt;/html&gt;
+	</code>
+	
+		
+</body>
+</html>
